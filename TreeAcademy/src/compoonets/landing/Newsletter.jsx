@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight, Mail } from "lucide-react";
 
 const newsletterApiUrl = import.meta.env.VITE_PAYMENT_API_URL || "";
+const newsletterApiBase = newsletterApiUrl ? newsletterApiUrl.replace(/\/$/, "") : "";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -14,12 +15,18 @@ export default function Newsletter() {
     setError("");
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError("Please enter a valid email address.");
     setSubmitting(true);
+    const endpoint = `${newsletterApiBase || ""}/api/newsletter`;
     try {
-      const response = await fetch(`${newsletterApiUrl}/api/newsletter`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email.trim() }) });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.message || "Unable to subscribe right now. Please try again.");
+      console.log("Newsletter request endpoint:", endpoint);
+      const response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email.trim() }) });
+      const text = await response.text();
+      let result = {};
+      try { result = JSON.parse(text); } catch (_) { result = {}; }
+      console.log("Newsletter response status:", response.status, "body:", text);
+      if (!response.ok) throw new Error(result.message || `Unable to subscribe right now. (${response.status})`);
       setSubscribed(true);
     } catch (subscriptionError) {
+      console.error("Newsletter subscription failed:", subscriptionError);
       setError(subscriptionError instanceof TypeError ? "Newsletter service is unavailable. Please try again shortly." : subscriptionError.message || "Unable to subscribe right now. Please try again.");
     } finally {
       setSubmitting(false);

@@ -1,0 +1,14 @@
+{
+  "subject": "Welcome to Training For Real Estate Excellence",
+  "preheader": "Welcome to the Training For Real Estate Excellence community and stay informed.",
+  "template_file": "output/ready_to_send.html",
+  "recipients_compiled": 0,
+  "personalization_placeholder": null,
+  "anomalies": [
+    {
+      "type": "missing_source_file",
+      "file": "data/subscribers.json",
+      "message": "No subscriber file was found, so no recipient records were compiled."
+    }
+  ]
+}

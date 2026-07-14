@@ -1,10 +1,7 @@
 {
   "functions": {
-    "api/payment-submissions.js": {
-      "includeFiles": "public/*.pdf"
-    },
-    "api/enroll.js": {
-      "includeFiles": "public/*.pdf"
+    "api/*.js": {
+      "includeFiles": "public/**/*.pdf"
     }
   }
 }

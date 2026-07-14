@@ -5,12 +5,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import cors from "cors";
 import express from "express";
-import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import multer from "multer";
 import nodemailer from "nodemailer";
 import { fileTypeFromFile } from "file-type";
 import { PDFDocument } from "pdf-lib";
+import { subscribeWithResend } from "../lib/newsletter.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadDirectory = path.join(__dirname, "uploads");
@@ -41,24 +41,9 @@ const upload = multer({
 const app = express();
 app.disable("x-powered-by");
 app.use(helmet({ crossOriginResourcePolicy: false }));
-app.use(cors({ origin: process.env.CLIENT_ORIGIN?.split(",") || "http://localhost:5173" }));
+const clientOrigins = process.env.CLIENT_ORIGIN?.split(",").map((origin) => origin.trim()).filter(Boolean) || ["http://localhost:5173", "http://127.0.0.1:5173"];
+app.use(cors({ origin: clientOrigins }));
 app.use(express.json());
-
-const submissionLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 5,
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-  message: { message: "Too many submissions. Please try again in 15 minutes." },
-});
-
-const newsletterLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 5,
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-  message: { message: "Too many subscription attempts. Please try again in 15 minutes." },
-});
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -69,34 +54,20 @@ const transporter = nodemailer.createTransport({
 
 const smtpIsConfigured = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
 
-app.post("/api/newsletter", newsletterLimiter, async (request, response, next) => {
+app.post("/api/newsletter", async (request, response, next) => {
   const email = typeof request.body?.email === "string" ? request.body.email.trim() : "";
   if (!/^\S+@\S+\.\S+$/.test(email)) return response.status(400).json({ message: "Please enter a valid email address." });
-  if (!smtpIsConfigured) return response.status(503).json({ message: "Newsletter email service is not configured yet. Please try again later." });
-
   try {
-    const from = process.env.SMTP_FROM || process.env.SMTP_USER;
-    await transporter.sendMail({
-      from,
-      to: email,
-      subject: "Welcome to the TREE Academy newsletter",
-      text: "Thank you for subscribing to TREE Academy. We will send you updates on review programs, masterclasses, and practical real estate learning resources.",
-      html: "<h2>Welcome to TREE Academy</h2><p>Thank you for subscribing. We will send you updates on review programs, masterclasses, and practical real estate learning resources.</p>",
-    });
-    await transporter.sendMail({
-      from,
-      to: "trainwithmastersonline@gmail.com",
-      replyTo: email,
-      subject: "New TREE Academy newsletter subscriber",
-      text: `New newsletter subscriber: ${email}`,
-    });
+    await subscribeWithResend(email);
     return response.status(201).json({ message: "Thank you! Please check your inbox for a confirmation email." });
   } catch (error) {
-    return next(error);
+    console.error("Newsletter subscription failed:", error);
+    const status = error.message === "Resend newsletter service is not configured yet." ? 503 : 500;
+    return response.status(status).json({ message: error.message || "Newsletter service is unavailable. Please try again shortly." });
   }
 });
 
-app.post(["/api/payment-submissions", "/api/enroll"], submissionLimiter, upload.fields([
+app.post(["/api/payment-submissions", "/api/enroll"], upload.fields([
   { name: "proofOfPayment", maxCount: 1 },
   { name: "signature", maxCount: 1 },
 ]), async (request, response, next) => {

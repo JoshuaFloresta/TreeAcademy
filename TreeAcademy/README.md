@@ -13,14 +13,14 @@ The React Compiler is enabled on this template. See [this documentation](https:/
 
 Note: This will impact Vite dev & build performances.
 
-## Test payment submissions locally
+## Test forms locally
 
-1. Copy `.env.example` to a new `.env` file and enter your Gmail SMTP address and Gmail App Password. Do not commit `.env`.
-2. In one terminal, run `npm run dev:api`.
-3. In another terminal, run `npm run dev` and open the local address Vite shows (normally `http://localhost:5173`).
+1. Copy `.env.example` to a new `.env` file and enter the mail-service credentials. Do not commit `.env`.
+2. For newsletter subscriptions, also set `RESEND_API_KEY` and `RESEND_FROM`. `RESEND_FROM` must use a sender domain verified in Resend.
+3. Run `npm run dev`, then open the local address Vite shows (normally `http://localhost:5173`). This starts both Vite and the local API on port 3001. If you only start the client with `npm run dev:client`, newsletter subscriptions and other `/api/*` requests will fail because the backend is not running.
 4. Complete an enrolment, draw a signature, and upload a PNG or JPG receipt. The completed agreement PDF, signature, receipt, and submitted details will be sent to `trainwithmastersonline@gmail.com`.
 
-The Vite development server proxies `/api/payment-submissions` to the local API at port 3001, so no `VITE_PAYMENT_API_URL` value is needed for local testing.
+Vite proxies `/api/*` requests to the local API at port 3001, so no `VITE_PAYMENT_API_URL` value is needed for local testing.
 
 ## Expanding the ESLint configuration
 
