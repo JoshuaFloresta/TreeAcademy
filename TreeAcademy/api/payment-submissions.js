@@ -1,9 +1,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import multer from "multer";
 import nodemailer from "nodemailer";
 import { fileTypeFromBuffer } from "file-type";
 import { PDFDocument } from "pdf-lib";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const programs = new Set([
   "REALEx - Real Estate Appraiser Review",
@@ -103,7 +106,8 @@ function clean(value, isAddress = false) {
 async function createCompletedAgreement({ program, name, contact, customerEmail, customerAddress, license, agreementDate, signature }) {
   const isReclex = program.startsWith("RECLEx");
   const templateName = isReclex ? "Reclex.pdf" : "Realex&Reblex.pdf";
-  const document = await PDFDocument.load(await fs.readFile(path.join(process.cwd(), "public", templateName)));
+  const pdfPath = path.join(__dirname, "..", "public", templateName);
+  const document = await PDFDocument.load(await fs.readFile(pdfPath));
   const form = document.getForm();
   const setText = (field, value) => form.getTextField(field).setText(value);
   const signatureFieldName = isReclex ? "b_signature" : "p_signature";
