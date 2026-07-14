@@ -1,0 +1,55 @@
+export const reviewPrograms = [
+  {
+    id: "REALEx",
+    name: "REALEx - Real Estate Appraiser Review",
+    shortName: "REALEx",
+    price: "₱25,000",
+    upfrontFee: "₱5,000 upfront fee",
+    contractPdf: "/Realex&Reblex.pdf",
+    description: "Master the science of property valuation. This course prepares you for the Appraiser licensure exam by delivering deep-dives into valuation mathematics, market analysis, and real-world, situational appraisal cases.",
+    perks: ["Expert-led appraisal coaching", "Mock exams and final coaching"],
+    modules: [
+      { number: "01", weeks: "Phase 1", title: "Foundations", description: "Introduces the fundamental principles of real property, valuation standards, ethics, and the legal framework governing professional appraisers.", topics: ["Philippine Valuation Standards (PVS)", "Real Estate Principles", "Market Analysis and Economic Concepts Relevant to Valuation", "More ..."] },
+      { number: "02", weeks: "Phase 2", title: "Valuation Methods & Practice", description: "Covers the primary methodology and practical techniques used to value property, including inspection processes, sales comparison, and cost calculations.", topics: ["Elements of Value, Appraisal Process, and Scope of Work", "Data Gathering and Property Inspection", "Cost Approach", "More ..."] },
+      { number: "03", weeks: "Phase 3", title: "Advanced Applications & Reviews", description: "Explores complex valuation concepts such as income capitalization, financial yield math, special-purpose properties, and regulatory compliance reviews.", topics: ["Income Capitalization Approach", "Appraisal Mathematics", "Special-Purpose Properties", "More ..."] },
+      { number: "04", weeks: "Phase 4", title: "Mock Exams & Intensive Reviews", description: "Combines rigorous mock testing with detailed evaluation and targeted writing reviews to master the final appraisal report.", topics: ["Fundamentals; Discussion of Mock Exam", "Weak Areas Review", "Appraisal Report Writing, Reconciliation, and Final Value Opinion"] },
+      { number: "05", weeks: "Phase 5", title: "Final Coaching", description: "The ultimate preparation session designed to lock in final strategies right before the licensure exam.", topics: ["Final Coaching and Exam Strategy"] },
+    ],
+  },
+  {
+    id: "REBLEx",
+    name: "REBLEx - Real Estate Broker Review",
+    shortName: "REBLEx",
+    price: "₱10,000",
+    upfrontFee: "₱500 upfront fee",
+    contractPdf: "/Realex&Reblex.pdf",
+    description: "Build a bulletproof foundation for your brokerage career. This program equips you with the vital legal knowledge, ethical standards, and operational practices needed to pass the Broker board exam on your first try.",
+    perks: ["Complete board-exam coverage", "Practical case discussions"],
+    modules: [
+      { number: "01", weeks: "Phase 1", title: "Foundations", description: "Master the principles, roles, and responsibilities of a real estate broker.", topics: ["Fundamentals of Property Ownership", "Code of Ethics and Responsibilities", "Real Estate Laws and Taxation","Subdivision Developments", "More .."] },
+      { number: "02", weeks: "Phase 2", title: "Practices & Technical Topics", description: "Focuses on the practical application of brokerage operations, including zoning, environmental principles, finance, and basic appraisal.", topics: ["Real Estate Finance and Economics", "Basic Appraisal for Real Estate Brokers", "Basic Principles of Ecology", "More .."] },
+      { number: "03", weeks: "Phase 3", title: "Reinforcement & Reviews", description: "Provides systematic, topic-by-topic reviews of foundational and practical concepts to reinforce understanding before testing begins.", topics: ["Review: Subdivision Development", "Review: Condominium Concepts", "Review: Urban and Land Use", "More .."] },
+      { number: "04", weeks: "Phase 4", title: "Mock Exams & Intensive Reviews", description: "An intensive testing and diagnostic phase featuring simulated board exams, weak-area targeting, and focused case-study applications.", topics: ["Professional Practice", "Case Studies and Applications", "Appraisal Intensive Review", "Brokerage Practice Review"] },
+      { number: "05", weeks: "Phase 5", title: "Final Coaching", description: "A final high-yield review session focused on exam-taking strategies and critical master summaries..", topics: ["Pre-Exam Master Review", "Final Coaching and Exam Strategy"] },
+    ],
+  },
+  {
+    id: "RECLEx",
+    name: "RECLEx - Real Estate Consultant Review",
+    shortName: "RECLEx",
+    price: "₱10,000",
+    upfrontFee: "₱500 upfront fee",
+    contractPdf: "/Reclex.pdf",
+    description: "A comprehensive 12-week review program for the Real Estate Consultant licensure exam. Deep-dives into high-level advisory practices, market research, financial modeling, risk sensitivity testing, and the development, writing, and defense of Project Feasibility Studies (PFS).",
+    perks: ["Strategic consultant training", "Feasibility-study case practice"],
+    modules: [
+      { number: "01", weeks: "Phase 1", title: "Foundations", description: "Outlines the high-level role of consulting, diving into legal land systems, economic factors, and professional ethical duties.", topics: ["Nature of Real Estate Consulting", "Real Estate Economics", "Land Management System", "More ..."] },
+      { number: "02", weeks: "Phase 2", title: "Market, Legal, and Financial Framework", description: "Analyzes the core economic drivers, supply-demand research, feasibility concepts, and site selections that support advisory services.", topics: ["Zoning and Development Controls", "Project Concept Development", "Legal and Institutional Analysis; Permits and Compliance","More ..."] },
+      { number: "03", weeks: "Phase 3", title: "Project Feasibility Study and Consultancy Practice", description: "A highly technical phase focused on conducting, writing, and defending a professional Project Feasibility Study (PFS), including financial modeling and sensitivity testing.", topics: ["Financial Feasibility I", "Financial Feasibility II", "Sensitivity Analysis, Risk Analysis, and Scenario Testing", "More ..."] },
+      { number: "04", weeks: "Phase 4", title: "Mock Exams and Intensive Reviews", description: "Features successive trial exams mirroring the official consultant board topics alongside applied problem-solving drills.", topics: ["PFS and Case Studies; Discussion of Mock Exam", "Weak Areas Review; Integrated Case Drills; Applied Problem Solving", "Full Mock Examination; Mock Examination Discussion"] },
+      { number: "05", weeks: "Phase 5", title: "Final Coaching", description: "A comprehensive wrap-up program covering final test tactics and high-level summaries for prospective consultants.", topics: ["Final Comprehensive Review", "Final Coaching and Exam Strategy"] },
+    ],
+  },
+];
+
+export const programNames = reviewPrograms.map((program) => program.name);
