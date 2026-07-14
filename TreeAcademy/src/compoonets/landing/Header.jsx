@@ -9,10 +9,9 @@ const navLinks = [
   { label: "Curriculum", href: "#curriculum" },
   { label: "Testimonials", href: "#testimonials" },
   { label: "FAQ", href: "#faq" },
-  { label: "Enroll", href: "#enrollment" },
 ];
 
-export default function Header({ onEnroll }) {
+export default function Header() {
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [atTop, setAtTop] = useState(true);
@@ -48,9 +47,7 @@ export default function Header({ onEnroll }) {
           </a>
 
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => link.label === "Enroll" ? (
-              <button key={link.href} type="button" onClick={onEnroll} className={`text-sm font-sans font-medium tracking-wide hover:text-[#B39255] transition-colors duration-300 relative after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[1px] after:bg-[#B39255] hover:after:w-full after:transition-all after:duration-300 ${atTop ? "text-white" : "text-[#1B432E]"}`}>{link.label}</button>
-            ) : (
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -59,13 +56,13 @@ export default function Header({ onEnroll }) {
                 {link.label}
               </a>
             ))}
-            <button
-              type="button"
-              onClick={onEnroll}
-              className={`ml-2 px-5 py-2 text-sm font-sans font-medium tracking-wide rounded transition-all duration-300 hover:shadow-lg ${atTop ? "bg-white/20 text-white border border-white/30 hover:bg-[#B39255] hover:border-[#B39255]" : "bg-[#1B432E] text-[#F9F9F7] hover:bg-[#B39255]"}`}
+            
+            <a
+              href="#enrollment"
+              className={`ml-2 px-5 py-2 text-sm font-sans font-medium tracking-wide rounded transition-all duration-300 hover:shadow-lg inline-block text-center ${atTop ? "bg-white/20 text-white border border-white/30 hover:bg-[#B39255] hover:border-[#B39255]" : "bg-[#1B432E] text-[#F9F9F7] hover:bg-[#B39255]"}`}
             >
               Start Learning
-            </button>
+            </a>
           </nav>
 
           <button
@@ -86,9 +83,7 @@ export default function Header({ onEnroll }) {
 
       {mobileOpen && (
         <div className="md:hidden bg-[#F9F9F7]/98 backdrop-blur-md border-t border-[#B39255]/20 px-6 pb-6 pt-2">
-          {navLinks.map((link) => link.label === "Enroll" ? (
-            <button key={link.href} type="button" onClick={() => { setMobileOpen(false); onEnroll(); }} className="block w-full py-3 text-left text-[#1B432E] font-sans font-medium text-base border-b border-[#1B432E]/5 hover:text-[#B39255] transition-colors">{link.label}</button>
-          ) : (
+          {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -98,13 +93,14 @@ export default function Header({ onEnroll }) {
               {link.label}
             </a>
           ))}
-          <button
-            type="button"
-            onClick={() => { setMobileOpen(false); onEnroll(); }}
+          
+          <a
+            href="#enrollment"
+            onClick={() => setMobileOpen(false)}
             className="mt-4 block text-center px-5 py-3 bg-[#1B432E] text-[#F9F9F7] font-sans font-medium rounded hover:bg-[#B39255] transition-all"
           >
             Start Learning
-          </button>
+          </a>
         </div>
       )}
     </header>

@@ -20,6 +20,7 @@ const programs = new Set([
   "REALEx - Real Estate Appraiser Review",
   "REBLEx - Real Estate Broker Review",
   "RECLEx - Real Estate Consultant Review",
+  "Masterclass Intensive Appraisal Copywriting with AI",
 ]);
 const allowedMimeTypes = new Set(["image/jpeg", "image/png"]);
 const programCodes = new Map([
@@ -41,6 +42,7 @@ const app = express();
 app.disable("x-powered-by");
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({ origin: process.env.CLIENT_ORIGIN?.split(",") || "http://localhost:5173" }));
+app.use(express.json());
 
 const submissionLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -48,6 +50,14 @@ const submissionLimiter = rateLimit({
   standardHeaders: "draft-8",
   legacyHeaders: false,
   message: { message: "Too many submissions. Please try again in 15 minutes." },
+});
+
+const newsletterLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: { message: "Too many subscription attempts. Please try again in 15 minutes." },
 });
 
 const transporter = nodemailer.createTransport({
@@ -59,29 +69,57 @@ const transporter = nodemailer.createTransport({
 
 const smtpIsConfigured = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
 
-app.post("/api/payment-submissions", submissionLimiter, upload.fields([
+app.post("/api/newsletter", newsletterLimiter, async (request, response, next) => {
+  const email = typeof request.body?.email === "string" ? request.body.email.trim() : "";
+  if (!/^\S+@\S+\.\S+$/.test(email)) return response.status(400).json({ message: "Please enter a valid email address." });
+  if (!smtpIsConfigured) return response.status(503).json({ message: "Newsletter email service is not configured yet. Please try again later." });
+
+  try {
+    const from = process.env.SMTP_FROM || process.env.SMTP_USER;
+    await transporter.sendMail({
+      from,
+      to: email,
+      subject: "Welcome to the TREE Academy newsletter",
+      text: "Thank you for subscribing to TREE Academy. We will send you updates on review programs, masterclasses, and practical real estate learning resources.",
+      html: "<h2>Welcome to TREE Academy</h2><p>Thank you for subscribing. We will send you updates on review programs, masterclasses, and practical real estate learning resources.</p>",
+    });
+    await transporter.sendMail({
+      from,
+      to: "trainwithmastersonline@gmail.com",
+      replyTo: email,
+      subject: "New TREE Academy newsletter subscriber",
+      text: `New newsletter subscriber: ${email}`,
+    });
+    return response.status(201).json({ message: "Thank you! Please check your inbox for a confirmation email." });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+app.post(["/api/payment-submissions", "/api/enroll"], submissionLimiter, upload.fields([
   { name: "proofOfPayment", maxCount: 1 },
   { name: "signature", maxCount: 1 },
 ]), async (request, response, next) => {
   const { fullName, contactNumber, address, email, licenseNumber, program } = request.body;
   const receipt = request.files?.proofOfPayment?.[0];
   const signature = request.files?.signature?.[0];
+  const requiresAgreement = program !== "Masterclass Intensive Appraisal Copywriting with AI";
   let completedAgreementPath;
 
   try {
     if (!smtpIsConfigured) {
       return response.status(503).json({ message: "Payment email service is not configured yet. Please contact Tree Academy." });
     }
-    if (!fullName?.trim() || !contactNumber?.trim() || !address?.trim() || !email?.trim() || !/^\S+@\S+\.\S+$/.test(email) || !programs.has(program) || !receipt || !signature) {
-      return response.status(400).json({ message: "Please complete all fields, sign the agreement, and upload a valid receipt." });
+    if (!fullName?.trim() || !contactNumber?.trim() || !address?.trim() || !email?.trim() || !/^\S+@\S+\.\S+$/.test(email) || !programs.has(program) || !receipt || (requiresAgreement && !signature)) {
+      return response.status(400).json({ message: requiresAgreement ? "Please complete all fields, sign the agreement, and upload a valid receipt." : "Please complete all fields and upload a valid receipt." });
     }
 
     // Verify the file signature; the browser-supplied MIME type alone is not trusted.
-    const uploadedFiles = [receipt, signature];
+    const uploadedFiles = [receipt, ...(signature ? [signature] : [])];
     const detectedTypes = await Promise.all(uploadedFiles.map((file) => fileTypeFromFile(file.path)));
     if (detectedTypes.some((type) => !type || !allowedMimeTypes.has(type.mime))) {
       uploadedFiles.forEach((file) => fs.existsSync(file.path) && fs.unlinkSync(file.path));
-      return response.status(400).json({ message: "Proof of payment and signature must be valid PNG or JPG images." });
+      return response.status(400).json({ message: requiresAgreement ? "Proof of payment and signature must be valid PNG or JPG images." : "Proof of payment must be a valid PNG or JPG image." });
     }
 
     const name = fullName.trim().replace(/[\r\n]/g, " ");
@@ -91,19 +129,18 @@ app.post("/api/payment-submissions", submissionLimiter, upload.fields([
     const license = (licenseNumber || "").trim().replace(/[\r\n]/g, " ");
     const submittedAt = new Intl.DateTimeFormat("en-PH", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Manila" }).format(new Date());
     const agreementDate = new Intl.DateTimeFormat("en-PH", { dateStyle: "medium", timeZone: "Asia/Manila" }).format(new Date());
-    const programCode = programCodes.get(program);
-    completedAgreementPath = await createCompletedAgreement({ program, fullName: name, address: customerAddress, contactNumber: contact, email: customerEmail, licenseNumber: license, agreementDate, signaturePath: signature.path });
+    const programCode = programCodes.get(program) || "MASTERCLASS";
+    if (requiresAgreement) completedAgreementPath = await createCompletedAgreement({ program, fullName: name, address: customerAddress, contactNumber: contact, email: customerEmail, licenseNumber: license, agreementDate, signaturePath: signature.path });
     await transporter.sendMail({
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: "trainwithmastersonline@gmail.com",
       replyTo: customerEmail,
       subject: `📥 [${programCode}] Payment Submission - ${name}`,
-      text: `=======================================================\nNEW ENROLLMENT PAYMENT SUBMISSION\n=======================================================\n\nWe have received a new manual payment submission from the website checkout.\nPlease verify this transaction in your bank/e-wallet statement.\n\nCUSTOMER DETAILS:\n-------------------------------------------------------\n👤 Full Name:      ${name}\n📱 Contact No:     ${contact}\n✉️ Email Address:  ${customerEmail}\n📍 Address:        ${customerAddress}\n\nENROLLMENT DETAILS:\n-------------------------------------------------------\n📚 Program:        ${program}\n📅 Date Submitted: ${submittedAt} (Asia/Manila)\n\nPROOF OF PAYMENT:\n-------------------------------------------------------\nAttached: proof of payment and signed enrollment agreement.`,
-      html: `<h2>New Enrollment Payment Submission</h2><p>We have received a new manual payment submission from the website checkout. Please verify this transaction in your bank/e-wallet statement.</p><h3>Customer Details</h3><p><strong>Full Name:</strong> ${escapeHtml(name)}<br><strong>Contact No:</strong> ${escapeHtml(contact)}<br><strong>Email Address:</strong> ${escapeHtml(customerEmail)}<br><strong>Address:</strong> ${escapeHtml(customerAddress)}</p><h3>Enrollment Details</h3><p><strong>Program:</strong> ${escapeHtml(program)}<br><strong>Date Submitted:</strong> ${escapeHtml(submittedAt)} (Asia/Manila)</p><h3>Proof of Payment</h3><p>Attached: proof of payment and signed enrollment agreement.</p>`,
+      text: `=======================================================\nNEW PAYMENT SUBMISSION\n=======================================================\n\nWe have received a new manual payment submission from the website checkout.\nPlease verify this transaction in your bank/e-wallet statement.\n\nCUSTOMER DETAILS:\n-------------------------------------------------------\n👤 Full Name:      ${name}\n📱 Contact No:     ${contact}\n✉️ Email Address:  ${customerEmail}\n📍 Address:        ${customerAddress}\n\nPROGRAM DETAILS:\n-------------------------------------------------------\n📚 Program:        ${program}\n📅 Date Submitted: ${submittedAt} (Asia/Manila)\n\nPROOF OF PAYMENT:\n-------------------------------------------------------\nAttached: proof of payment${requiresAgreement ? " and signed enrollment agreement" : ""}.`,
+      html: `<h2>New Payment Submission</h2><p>We have received a new manual payment submission from the website checkout. Please verify this transaction in your bank/e-wallet statement.</p><h3>Customer Details</h3><p><strong>Full Name:</strong> ${escapeHtml(name)}<br><strong>Contact No:</strong> ${escapeHtml(contact)}<br><strong>Email Address:</strong> ${escapeHtml(customerEmail)}<br><strong>Address:</strong> ${escapeHtml(customerAddress)}</p><h3>Program Details</h3><p><strong>Program:</strong> ${escapeHtml(program)}<br><strong>Date Submitted:</strong> ${escapeHtml(submittedAt)} (Asia/Manila)</p><h3>Proof of Payment</h3><p>Attached: proof of payment${requiresAgreement ? " and signed enrollment agreement" : ""}.</p>`,
       attachments: [
         { filename: `proof-of-payment${path.extname(receipt.filename)}`, path: receipt.path },
-        { filename: `completed-${programCode}-commitment-agreement.pdf`, path: completedAgreementPath },
-        { filename: `signed-enrollment-agreement${path.extname(signature.filename)}`, path: signature.path },
+        ...(requiresAgreement ? [{ filename: `completed-${programCode}-commitment-agreement.pdf`, path: completedAgreementPath }, { filename: `signed-enrollment-agreement${path.extname(signature.filename)}`, path: signature.path }] : []),
       ],
     });
 
@@ -128,7 +165,7 @@ function escapeHtml(value) {
 
 async function createCompletedAgreement({ program, fullName, address, contactNumber, email, licenseNumber, agreementDate, signaturePath }) {
   const isReclex = program.startsWith("RECLEx");
-  const templateName = isReclex ? "reclex-commitment-agreement.pdf" : "realex-reblex-commitment-agreement.pdf";
+  const templateName = isReclex ? "Reclex.pdf" : "Realex&Reblex.pdf";
   const document = await PDFDocument.load(await fs.promises.readFile(path.join(__dirname, "..", "public", templateName)));
   const form = document.getForm();
   const setText = (fieldName, value) => form.getTextField(fieldName).setText(value);

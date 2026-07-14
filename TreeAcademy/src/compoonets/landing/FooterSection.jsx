@@ -56,8 +56,10 @@ export default function FooterSection() {
               Connect
             </h4>
             <div className="space-y-3">
-              <a href="mailto:hello@tree-education.com" className="block text-[#F9F9F7]/50 font-sans text-sm hover:text-[#B39255] transition-colors">hello@tree-education.com</a>
-              <a href="tel:+18005551234" className="block text-[#F9F9F7]/50 font-sans text-sm hover:text-[#B39255] transition-colors">+1 (800) 555-1234</a>
+              <a href="mailto:hello@tree-education.com" className="block text-[#F9F9F7]/50 font-sans text-sm hover:text-[#B39255] transition-colors">trainwithmastersonline@gmail.com</a>
+              <a href="https://www.facebook.com/williamfloresta" target="_blank" className="block text-[#F9F9F7]/50 font-sans text-sm hover:text-[#B39255] transition-colors">Facebook</a>
+              <a href="https://www.facebook.com/TrainingForRealEstateExcellence" target="_blank" className="block text-[#F9F9F7]/50 font-sans text-sm hover:text-[#B39255] transition-colors">Page</a>
+
             </div>
           </div>
         </div>

@@ -13,6 +13,15 @@ The React Compiler is enabled on this template. See [this documentation](https:/
 
 Note: This will impact Vite dev & build performances.
 
+## Test payment submissions locally
+
+1. Copy `.env.example` to a new `.env` file and enter your Gmail SMTP address and Gmail App Password. Do not commit `.env`.
+2. In one terminal, run `npm run dev:api`.
+3. In another terminal, run `npm run dev` and open the local address Vite shows (normally `http://localhost:5173`).
+4. Complete an enrolment, draw a signature, and upload a PNG or JPG receipt. The completed agreement PDF, signature, receipt, and submitted details will be sent to `trainwithmastersonline@gmail.com`.
+
+The Vite development server proxies `/api/payment-submissions` to the local API at port 3001, so no `VITE_PAYMENT_API_URL` value is needed for local testing.
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

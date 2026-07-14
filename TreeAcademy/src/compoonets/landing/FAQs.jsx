@@ -4,34 +4,35 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "Who is this course designed for?",
-    answer: "TREE is built for ambitious professionals at any stage — whether you're entering real estate for the first time, transitioning from a related field like finance or law, or a practicing agent looking to deepen your investment and valuation expertise. Our cohort structure ensures you'll learn alongside peers at a similar level of commitment.",
+    "question": "Will I have lifetime access to the course materials and community, or does access expire?",
+    "answer": "Yes, you will receive full lifetime access! Once you enroll, you can revisit the course materials, resource libraries, and community spaces whenever you like, allowing you to learn at your own pace."
   },
   {
-    question: "How much time do I need to commit each week?",
-    answer: "Expect 8–10 hours per week: two live sessions of 90 minutes each, plus case study work, readings, and assignments. The curriculum is dense by design — we respect your time by making every hour count. All live sessions are recorded and available within 24 hours for those in different time zones.",
+    "question": "Are the live group sessions recorded if I cannot make the scheduled time?",
+    "answer": "Yes, all live sessions are fully recorded. If you have a scheduling conflict or miss a live class, the recordings are uploaded directly to the learning platform shortly after each session so you can easily catch up."
   },
   {
-    question: "Is the course fully online or are there in-person components?",
-    answer: "The core curriculum is fully online and accessible globally. However, we host an optional in-person capstone weekend at the end of the 12 weeks for students who can attend. This gathering includes live deal reviews, networking dinners, and a graduation ceremony. Attendance is not required to receive your certificate.",
+    "question": "How much time do I need to commit each week?",
+    "answer": "The course consists of live sessions held every Thursday and Friday, requiring a commitment of 3 hours per session (6 hours total per week)."
   },
   {
-    question: "What credentials or certificate do I receive upon completion?",
-    answer: "Graduates receive a TREE Certificate of Professional Excellence, which is recognized by several state real estate boards for continuing education credits. You'll also receive a detailed skill assessment and a letter of recommendation from your primary instructor upon request.",
+    "question": "Is the course fully online or are there in-person components?",
+    "answer": "The program is 100% online, allowing you to attend live sessions and access all learning materials comfortably from anywhere."
   },
   {
-    question: "What is the refund policy?",
-    answer: "We offer a full 30-day money-back guarantee. If you complete the first two modules and feel the program isn't the right fit, we'll refund 100% of your tuition — no questions asked. Beyond 30 days, we work with students individually on a case-by-case basis.",
+    "question": "What credentials or certificate do I receive upon completion?",
+    "answer": "Upon successfully completing the program, you will receive an official Certificate of Completion to showcase your achievement and new skills."
   },
   {
-    question: "Can I pay in installments?",
-    answer: "Yes. We offer a 3-payment plan of $895/month at no additional cost. We also offer need-based scholarships for qualifying applicants. Contact our admissions team to learn more about financial flexibility options.",
+    "question": "What is the refund policy?",
+    "answer": "Please note that all sales are final, and we do not offer refunds once enrollment is confirmed. We encourage you to review the course details thoroughly before registering."
   },
   {
-    question: "How large are the cohorts?",
-    answer: "We cap each cohort at 40 students. This is a deliberate choice — small cohort sizes ensure every student receives direct feedback, meaningful instructor access, and genuine peer relationships. Seats fill quickly; we recommend applying at least 6 weeks before the cohort start date.",
-  },
+    "question": "Can I pay in installments?",
+    "answer": "Yes! In addition to our standard upfront full payment option, we offer flexible installment plans to help break up the cost into manageable payments."
+  }
 ];
+
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -106,7 +107,7 @@ export default function FAQ() {
         >
           <p className="text-[#1B432E]/40 font-sans text-sm">
             Still have questions?{" "}
-            <a href="mailto:hello@tree-education.com" className="text-[#B39255] hover:underline font-medium transition-colors">
+            <a href="mailto:trainwithmastersonline@gmail.com" className="text-[#B39255] hover:underline font-medium transition-colors">
               Reach out to our team
             </a>
           </p>

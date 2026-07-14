@@ -28,13 +28,13 @@ export default function Instructors() {
           className="text-center mb-20"
         >
           <span className="text-[#B39255] font-sans text-sm tracking-[0.25em] uppercase font-medium">
-            Your Guides
+            Your Guide
           </span>
           <h2 className="mt-4 font-serif text-[#1B432E] text-3xl md:text-display-sm font-bold">
             Learn from the Best
           </h2>
           <p className="mt-4 text-[#1B432E]/60 font-sans text-lg max-w-xl mx-auto leading-relaxed">
-            Our instructors aren't just academics — they're active practitioners who have shaped the industry.
+          "Real market experience. Real-time mentorship."          
           </p>
         </motion.div>
 

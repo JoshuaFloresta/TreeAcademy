@@ -62,13 +62,12 @@ export default function Hero({ onEnroll }) {
             transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <button
-              type="button"
-              href="#enrollment"
-              className="inline-flex items-center justify-center px-8 py-4 bg-[#B39255] text-[#1B432E] font-sans font-semibold text-base tracking-wide rounded shadow-lg hover:shadow-xl hover:bg-[#c9a76a] transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Begin Your Journey
-            </button>
+        <a
+          href="#enrollment"
+          className="inline-flex items-center justify-center px-8 py-4 bg-[#B39255] text-[#1B432E] font-sans font-semibold text-base tracking-wide rounded shadow-lg hover:shadow-xl hover:bg-[#c9a76a] transition-all duration-300 hover:-translate-y-0.5"
+        >
+        Begin Your Journey
+          </a>
             <a
               href="#curriculum"
               className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#F9F9F7]/30 text-[#F9F9F7] font-sans font-medium text-base tracking-wide rounded hover:border-[#B39255] hover:text-[#B39255] transition-all duration-300"
