@@ -63,7 +63,8 @@ const welcomeHtml = `<!DOCTYPE html>
 </html>`;
 
 export async function subscribeWithResend(email) {
-  const { RESEND_API_KEY: apiKey, RESEND_FROM: from } = process.env;
+  const apiKey = (process.env.RESEND_API_KEY || "").trim();
+  const from = (process.env.RESEND_FROM || "").trim();
   if (!apiKey || !from) throw new Error("Resend newsletter service is not configured yet.");
 
   const headers = {
