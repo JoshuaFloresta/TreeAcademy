@@ -50,7 +50,7 @@ export default function Testimonials() {
               className="relative flex h-full flex-col bg-white/60 backdrop-blur-sm rounded-lg p-8 md:p-10 border border-[#1B432E]/[0.06] hover:border-[#B39255]/30 transition-all duration-500 hover:shadow-lg"
             >
               <Quote className="w-8 h-8 text-[#B39255]/30 mb-6" />
-              <p className="text-[#1B432E]/75 font-sans text-[15px] leading-[1.7] mb-8 italic">
+              <p className="text-[#1B432E]/75 font-sans text-[15px] leading-[1.7] mb-8 italic text-justify">
                 "{t.quote}"
               </p>
               <div className="mt-auto border-t border-[#1B432E]/[0.08] pt-5">

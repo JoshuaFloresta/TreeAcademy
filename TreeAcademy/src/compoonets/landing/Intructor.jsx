@@ -71,7 +71,7 @@ export default function Instructors() {
                 </p>
               </div>
 
-              <p className="text-[#1B432E]/65 font-sans text-base leading-relaxed">
+              <p className="text-[#1B432E]/65 font-sans text-base leading-relaxed text-justify">
                 {instructor.bio}
               </p>
 

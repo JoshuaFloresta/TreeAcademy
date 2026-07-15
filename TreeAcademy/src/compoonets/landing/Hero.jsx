@@ -51,9 +51,12 @@ export default function Hero({ onEnroll }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="text-[#F9F9F7]/80 font-sans text-lg md:text-xl leading-relaxed mb-10 max-w-lg"
+            className="text-[#F9F9F7]/80 font-sans text-lg md:text-xl leading-relaxed mb-10 max-w-lg text-justify"
           >
-           Your ultimate preparation blueprint. Master every topic in property valuation, brokerage laws, and market analysis with a structured review built to help you pass with confidence.
+           TREE Academy for Real Estate Excellence is a professional 
+           education and training institution dedicated to developing
+           competent, ethical, technology-ready, and 
+           practice-oriented real estate professionals.
           </motion.p>
 
           <motion.div
@@ -88,7 +91,7 @@ export default function Hero({ onEnroll }) {
             </div>
             <div className="w-px h-8 bg-[#F9F9F7]/20" />
             <div className="flex flex-col">
-              <span className="text-[#B39255] font-serif text-2xl font-bold">30+</span>
+              <span className="text-[#B39255] font-serif text-2xl font-bold">50+</span>
               <span>Modules</span>
             </div>
           </motion.div>

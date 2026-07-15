@@ -6,6 +6,7 @@ import Instructors from '../compoonets/landing/Intructor';
 import Syllabus from '../compoonets/landing/Syllabus';
 import Testimonials from '../compoonets/landing/Testimonials';
 import FAQ from '../compoonets/landing/FAQs';
+import PassFirst from '../compoonets/landing/PassFirst';
 import Enrollment from '../compoonets/landing/Enrollment';
 import Masterclass from '../compoonets/landing/Masterclass';
 import Newsletter from '../compoonets/landing/Newsletter';
@@ -23,6 +24,7 @@ export default function Home() {
       <Syllabus />
       <Testimonials />
       <FAQ />
+      <PassFirst />
       <Enrollment isOpen={enrollmentOpen} onOpen={() => setEnrollmentOpen(true)} onClose={() => setEnrollmentOpen(false)} />
       <Masterclass />
       <Newsletter />

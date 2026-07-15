@@ -46,7 +46,7 @@ export default function Features() {
           <h2 className="mt-4 font-serif text-[#1B432E] text-3xl md:text-display-sm font-bold">
             Four Pillars of Excellence
           </h2>
-          <p className="mt-4 text-[#1B432E]/60 font-sans text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="mt-4 text-[#1B432E]/60 font-sans text-lg max-w-xl mx-auto leading-relaxed text-justify">
             Our curriculum is built on the foundational skills every successful real estate professional must command.
           </p>
         </motion.div>
@@ -72,7 +72,7 @@ export default function Features() {
               <h3 className="font-serif text-[#1B432E] text-xl font-bold mb-2">
                 {feature.title}
               </h3>
-              <p className="mt-auto text-[#1B432E]/60 font-sans text-sm leading-relaxed">
+              <p className="mt-auto text-[#1B432E]/60 font-sans text-sm leading-relaxed text-justify">
                 {feature.description}
               </p>
             </motion.div>
